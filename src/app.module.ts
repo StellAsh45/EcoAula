@@ -1,8 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { MoviesModule } from './movies/movies.module';
 import { PerfilesModule } from './perfiles/perfiles.module';
+
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
@@ -17,8 +19,9 @@ import { PerfilesModule } from './perfiles/perfiles.module';
       inject: [ConfigService],
     }),
 
-    MoviesModule,
     PerfilesModule,
   ],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}

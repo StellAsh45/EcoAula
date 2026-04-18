@@ -8,7 +8,7 @@ import { Document } from 'mongoose';
 
 export type PerfilDocument = Perfil & Document;
 
-@Schema()
+@Schema({ collection: 'perfiles', versionKey: false })
 export class Perfil {
   @Prop({ required: true })
   nombre: string;

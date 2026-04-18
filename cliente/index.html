@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoSmart - Gestión de Perfiles</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #10b981;
+            --primary-hover: #059669;
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #f8fafc;
+            --text-muted: #2ff419;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 2rem;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+        }
+
+        /* Efecto Glassmorphism */
+        .panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        h1,
+        h2 {
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+
+        h1 {
+            color: var(--primary);
+            font-size: 2rem;
+            grid-column: 1 / -1;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        /* Formulario */
+        .formulario {
+            margin-bottom: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--glass-border);
+            background: rgba(0, 0, 0, 0.2);
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+        }
+
+        .checkbox-group {
+            flex-direction: row;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .checkbox-group input {
+            width: auto;
+            accent-color: var(--primary);
+            width: 18px;
+            height: 18px;
+        }
+
+        button {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 8px;
+            background: var(--primary);
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.1s ease;
+            margin-top: 1rem;
+        }
+
+        button:hover {
+            background: var(--primary-hover);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .matriz-perfiles {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .tarjetas-perfiles {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .tarjetas-perfiles:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            border-color: rgba(16, 185, 129, 0.4);
+        }
+
+        .encabezado-perfiles {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .nombre-perfiles {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .estado {
+            font-size: 0.75rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .estado-activo {
+            background: rgba(16, 185, 129, 0.2);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .estado-inactivo {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .detalles-perfil {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .detalles-perfil strong {
+            color: #cbd5e1;
+            font-weight: 500;
+        }
+
+        #notificacion {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            transform: translateX(150%);
+            transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .informe-exito {
+            background: #10b981;
+        }
+
+        .informe-error {
+            background: #ef4444;
+        }
+
+        .mostrar-notificacion {
+            transform: translateX(0) !important;
+        }
+
+        @media (max-width: 900px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="notificacion">Mensaje</div>
+
+    <div class="container">
+        <h1>panel administrador - Gestión de estudiantes</h1>
+        <div class="panel">
+            <h2>Crear Perfil</h2>
+            <form id="perfilForm">
+                <div class="formulario">
+                    <label for="nombre">Nombre Completo</label>
+                    <input type="text" id="nombre" required placeholder="Ej: Nombre completo">
+                </div>
+
+                <div class="formulario">
+                    <label for="rol">Rol en el sistema</label>
+                    <select id="rol" required>
+                        <option value="" disabled selected>Selecciona un rol...</option>
+                        <option value="Administrador">Administrador</option>
+                        <option value="Invitado">Estudiante</option>
+                    </select>
+                </div>
+
+                <div class="formulario">
+                    <label for="correo">Correo Electrónico</label>
+                    <input type="email" id="correo" required placeholder="ejemplo@correo.com">
+                </div>
+
+                <div class="formulario">
+                    <label for="fecha_nacimiento">Fecha de Nacimiento</label>
+                    <input type="date" id="fecha_nacimiento" required>
+                </div>
+
+                <div class="formulario checkbox-group">
+                    <input type="checkbox" id="activo" checked>
+                    <label for="activo">Usuario Activo</label>
+                </div>
+
+                <button type="submit">Guardar Perfil</button>
+            </form>
+        </div>
+
+        <div class="panel">
+            <h2>Perfiles Registrados (<span id="count">0</span>)</h2>
+            <div class="matriz-perfiles" id="profilesContainer">
+                <p style="color: var(--text-muted);">Cargando perfiles...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:3000/perfiles';
+
+        const form = document.getElementById('perfilForm');
+        const profilesContainer = document.getElementById('profilesContainer');
+        const countSpan = document.getElementById('count');
+        const notificacion = document.getElementById('notificacion');
+
+        function shownotificacion(message, type) {
+            notificacion.textContent = message;
+            notificacion.className = `notify-${type} mostrar-notificacion`;
+            setTimeout(() => {
+                notificacion.className = '';
+            }, 1000);
+        }
+
+        // 1. OBTENER PERFILES (Metodo GET)
+        async function fetchPerfiles() {
+            try {
+                // Hacer la peticion GET al backend de NestJS
+                const response = await fetch(API_URL);
+                if (!response.ok) {
+                    throw new Error('Error al conectar con la API');
+                }
+
+                const data = await response.json();
+                renderProfiles(data);
+
+            } catch (error) {
+                console.error(error);
+                profilesContainer.innerHTML = `<p style="color: #ef4444;">No se pudo cargar los datos. Verifica que NestJS esté corriendo y CORS esté habilitado.</p>`;
+                shownotificacion('Error al cargar datos', 'error');
+            }
+        }
+
+        function renderProfiles(perfiles) {
+            countSpan.textContent = perfiles.length;
+
+            if (perfiles.length === 0) {
+                profilesContainer.innerHTML = '<p style="color: var(--text-muted);">No hay perfiles registrados aún.</p>';
+                return;
+            }
+
+            profilesContainer.innerHTML = perfiles.map(perfil => `
+                <div class="tarjetas-perfiles">
+                    <div class="encabezado-perfiles">
+                        <span class="nombre-perfiles">${perfil.nombre}</span>
+                        <span class="estado ${perfil.activo ? 'estado-activo' : 'estado-inactivo'}">
+                            ${perfil.activo ? 'Activo' : 'Inactivo'}
+                        </span>
+                    </div>
+                    <div class="detalles-perfil">
+                        <strong>Rol:</strong> ${perfil.rol}
+                    </div>
+                    <div class="detalles-perfil">
+                        <strong>Email:</strong> ${perfil.correo}
+                    </div>
+                    <div class="detalles-perfil">
+                        <strong>Nacimiento:</strong> ${perfil.fecha_nacimiento}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 2. CREAR PERFIL (Metodo POST)
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault(); // Evitar que la página recargue
+
+            const nuevoPerfil = {
+                nombre: document.getElementById('nombre').value,
+                rol: document.getElementById('rol').value,
+                correo: document.getElementById('correo').value,
+                fecha_nacimiento: document.getElementById('fecha_nacimiento').value,
+                activo: document.getElementById('activo').checked
+            };
+
+            try {
+                // Hacer la peticion POST
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(nuevoPerfil)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Error al guardar');
+                }
+
+                shownotificacion('¡Perfil guardado con éxito!', 'success');
+
+                // Limpiar el formulario
+                form.reset();
+
+                // Recargar la lista para mostrar el nuevo perfil
+                fetchPerfiles();
+
+            } catch (error) {
+                console.error(error);
+                // Si class-validator rechaza el body (ej: correo invalido), caera aqui
+                shownotificacion(`Error: ${error.message}`, 'error');
+            }
+        });
+
+        // Al cargar la pagina, llamar al GET
+        window.addEventListener('DOMContentLoaded', fetchPerfiles);
+    </script>
+</body>
+
+</html>
