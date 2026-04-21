@@ -4,29 +4,38 @@ import { Model } from 'mongoose';
 import { Perfil, PerfilDocument } from './perfiles.schema';
 import { CreatePerfilDto } from './dto/create-perfil.dto';
 
-// Aqui va la logica de negocio, es decir, las funciones que se encargan de realizar las operaciones CRUD (Create, Read)
-// sobre la base de datos. Estas funciones pueden ser llamadas desde los controladores para manejar las solicitudes HTTP y devolver las respuestas correspondientes.
 @Injectable()
 export class PerfilesService {
   constructor(
     @InjectModel(Perfil.name) private perfilModel: Model<PerfilDocument>,
   ) {}
 
-  // Obtener todos los perfiles
   async findAll(): Promise<Perfil[]> {
     return this.perfilModel.find().exec();
   }
 
-  // Obtener un perfil por ID
   async findOne(id: string): Promise<Perfil> {
     const perfil = await this.perfilModel.findById(id).exec();
     if (!perfil) throw new NotFoundException(`Perfil #${id} not found`);
     return perfil;
   }
 
-  // Crear un perfil
   async create(dto: CreatePerfilDto): Promise<Perfil> {
     const newPerfil = new this.perfilModel(dto);
     return newPerfil.save();
+  }
+
+  async remove(id: string): Promise<any> {
+    const result = await this.perfilModel.findByIdAndDelete(id).exec();
+    if (!result) throw new NotFoundException(`Perfil #${id} not found`);
+    return result;
+  }
+
+  async update(id: string, updateData: any): Promise<Perfil> {
+    const updated = await this.perfilModel
+      .findByIdAndUpdate(id, updateData, { new: true })
+      .exec();
+    if (!updated) throw new NotFoundException(`Perfil #${id} not found`);
+    return updated;
   }
 }

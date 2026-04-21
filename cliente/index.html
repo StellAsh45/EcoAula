@@ -4,399 +4,436 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EcoSmart - Gestión de Perfiles</title>
+    <title>EcoSmart - Panel Administrador</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #10b981;
-            --primary-hover: #059669;
-            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            --glass-bg: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --text-main: #f8fafc;
-            --text-muted: #2ff419;
-        }
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&family=Inter:wght@400;700&display=swap"
+        rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script> <!--Para que el ojo no se demore en aparecer cerrado-->
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Outfit', sans-serif;
-        }
-
-        body {
-            background: var(--bg-gradient);
-            color: var(--text-main);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            padding: 2rem;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 2rem;
-        }
-
-        /* Efecto Glassmorphism */
-        .panel {
-            background: var(--glass-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            padding: 2rem;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        h1,
-        h2 {
-            margin-bottom: 1.5rem;
-            font-weight: 600;
-            letter-spacing: -0.5px;
-        }
-
-        h1 {
-            color: var(--primary);
-            font-size: 2rem;
-            grid-column: 1 / -1;
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        /* Formulario */
-        .formulario {
-            margin-bottom: 1.2rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        label {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            font-weight: 500;
-        }
-
-        input,
-        select {
-            width: 100%;
-            padding: 0.8rem 1rem;
-            border-radius: 8px;
-            border: 1px solid var(--glass-border);
-            background: rgba(0, 0, 0, 0.2);
-            color: white;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        input:focus,
-        select:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
-        }
-
-        .checkbox-group {
-            flex-direction: row;
-            align-items: center;
-            gap: 0.8rem;
-        }
-
-        .checkbox-group input {
-            width: auto;
-            accent-color: var(--primary);
-            width: 18px;
-            height: 18px;
-        }
-
-        button {
-            width: 100%;
-            padding: 1rem;
-            border: none;
-            border-radius: 8px;
-            background: var(--primary);
-            color: white;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s ease, transform 0.1s ease;
-            margin-top: 1rem;
-        }
-
-        button:hover {
-            background: var(--primary-hover);
-        }
-
-        button:active {
-            transform: scale(0.98);
-        }
-
-        .matriz-perfiles {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .tarjetas-perfiles {
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            padding: 1.5rem;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .tarjetas-perfiles:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-            border-color: rgba(16, 185, 129, 0.4);
-        }
-
-        .encabezado-perfiles {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .nombre-perfiles {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #fff;
-        }
-
-        .estado {
-            font-size: 0.75rem;
-            padding: 0.2rem 0.6rem;
-            border-radius: 20px;
-            font-weight: 600;
-        }
-
-        .estado-activo {
-            background: rgba(16, 185, 129, 0.2);
-            color: #34d399;
-            border: 1px solid rgba(16, 185, 129, 0.3);
-        }
-
-        .estado-inactivo {
-            background: rgba(239, 68, 68, 0.2);
-            color: #f87171;
-            border: 1px solid rgba(239, 68, 68, 0.3);
-        }
-
-        .detalles-perfil {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .detalles-perfil strong {
-            color: #cbd5e1;
-            font-weight: 500;
-        }
-
-        #notificacion {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 1rem 1.5rem;
-            border-radius: 8px;
-            color: white;
-            font-weight: 500;
-            transform: translateX(150%);
-            transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            z-index: 1000;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .informe-exito {
-            background: #10b981;
-        }
-
-        .informe-error {
-            background: #ef4444;
-        }
-
-        .mostrar-notificacion {
-            transform: translateX(0) !important;
-        }
-
-        @media (max-width: 900px) {
-            .container {
-                grid-template-columns: 1fr;
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#ffffff', 100: '#dcfce7', 200: '#bbf7d0', 300: '#86efac',
+                            400: '#4ade80', 500: '#10f981', 600: '#059669',
+                            700: '#047857', 800: '#135300', 900: '#7CBC02',
+                        }
+                    },
+                    fontFamily: {
+                        heading: ['Outfit', 'Inter', 'sans-serif'],
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
             }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #020617;
+            color: white;
+        }
+
+        @keyframes fadeInSlow {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes scaleDownSlow {
+            from {
+                transform: scale(1.1);
+            }
+
+            to {
+                transform: scale(1);
+            }
+        }
+
+        .animate-fade-in-slow {
+            animation: fadeInSlow 1.5s ease-in-out forwards;
+        }
+
+        .animate-scale-down-slow {
+            animation: scaleDownSlow 10s linear forwards;
+        }
+
+        .particles-container {
+            position: absolute;
+            inset: 0;
+            background-image:
+                radial-gradient(circle at 20% 30%, rgba(34, 197, 94, 0.4) 1px, transparent 1px),
+                radial-gradient(circle at 70% 60%, rgba(190, 242, 100, 0.4) 1px, transparent 1px),
+                radial-gradient(circle at 40% 80%, rgba(255, 255, 255, 0.3) 1px, transparent 1px);
+            background-size: 150px 150px;
+            opacity: 0.6;
+            animation: floatParticles 30s linear infinite;
+        }
+
+        @keyframes floatParticles {
+            0% {
+                transform: translateY(0) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-50px) rotate(180deg);
+            }
+
+            100% {
+                transform: translateY(0) rotate(360deg);
+            }
+        }
+
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+        }
+
+        [hidden] {
+            display: none !important;
         }
     </style>
 </head>
 
-<body>
+<body class="font-sans antialiased selection:bg-primary-500/30 selection:text-white">
 
-    <div id="notificacion">Mensaje</div>
+    <!-- Fondo visual -->
+    <div class="fixed inset-0 z-[-1] bg-slate-950 overflow-hidden">
+        <div class="absolute inset-0 animate-fade-in-slow">
+            <div class="absolute inset-0 animate-scale-down-slow">
+                <img src="https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+                    alt="Nature Background" class="w-full h-full object-cover grayscale-[0.2] contrast-[1.1]" />
+                <div class="absolute inset-0 bg-gradient-to-b from-slate-950/50 via-slate-950/30 to-slate-950/60"></div>
+            </div>
 
-    <div class="container">
-        <h1>panel administrador - Gestión de estudiantes</h1>
-        <div class="panel">
-            <h2>Crear Perfil</h2>
-            <form id="perfilForm">
-                <div class="formulario">
-                    <label for="nombre">Nombre Completo</label>
-                    <input type="text" id="nombre" required placeholder="Ej: Nombre completo">
+            <div class="absolute inset-0 opacity-40 mix-blend-overlay pointer-events-none">
+                <div
+                    class="absolute top-[-20%] left-[-10%] w-[70%] h-[70%] rounded-full blur-[150px] animate-pulse bg-emerald-600/30">
                 </div>
-
-                <div class="formulario">
-                    <label for="rol">Rol en el sistema</label>
-                    <select id="rol" required>
-                        <option value="" disabled selected>Selecciona un rol...</option>
-                        <option value="Administrador">Administrador</option>
-                        <option value="Invitado">Estudiante</option>
-                    </select>
+                <div
+                    class="absolute bottom-[-20%] right-[-10%] w-[80%] h-[80%] rounded-full blur-[150px] animate-pulse bg-slate-700/40 delay-1000">
                 </div>
-
-                <div class="formulario">
-                    <label for="correo">Correo Electrónico</label>
-                    <input type="email" id="correo" required placeholder="ejemplo@correo.com">
-                </div>
-
-                <div class="formulario">
-                    <label for="fecha_nacimiento">Fecha de Nacimiento</label>
-                    <input type="date" id="fecha_nacimiento" required>
-                </div>
-
-                <div class="formulario checkbox-group">
-                    <input type="checkbox" id="activo" checked>
-                    <label for="activo">Usuario Activo</label>
-                </div>
-
-                <button type="submit">Guardar Perfil</button>
-            </form>
-        </div>
-
-        <div class="panel">
-            <h2>Perfiles Registrados (<span id="count">0</span>)</h2>
-            <div class="matriz-perfiles" id="profilesContainer">
-                <p style="color: var(--text-muted);">Cargando perfiles...</p>
             </div>
         </div>
+        <div class="particles-container pointer-events-none"></div>
+    </div>
+
+    <!-- Header -->
+    <header
+        class="fixed top-0 w-full z-50 bg-white/5 backdrop-blur-2xl border-b border-primary-800/90 px-6 sm:px-10 py-4 flex justify-between items-center text-white">
+        <div class="flex items-center gap-3 group">
+            <div class="relative">
+                <div
+                    class="absolute inset-0 bg-primary-400 blur-xl opacity-20 group-hover:opacity-50 transition-opacity">
+                </div>
+                <div
+                    class="w-12 h-12 relative group-hover:scale-110 transition-all duration-500 ease-out flex items-center justify-center">
+                    <img src="assets/logo.png" alt="EcoSmart Logo"
+                        class="w-full h-full object-contain brightness-110 contrast-125">
+                </div>
+            </div>
+            <span
+                class="text-2xl font-black tracking-tight text-white drop-shadow-sm font-heading hidden sm:block uppercase">
+                Panel Administrador
+            </span>
+        </div>
+
+        <div class="flex items-center gap-6">
+            <div class="w-px h-6 bg-white/10 hidden sm:block"></div>
+            <div class="flex items-center gap-4 relative">
+                <div class="text-right min-w-[100px] flex flex-col items-end">
+                    <p class="text-sm font-black text-primary-50 uppercase">ADMINISTRADOR</p>
+                    <p class="text-[10px] font-black text-primary-400 uppercase tracking-widest">General</p>
+                </div>
+                <button
+                    class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center hover:bg-white/20 hover:scale-105 overflow-hidden transition-all bg-transparent border-none cursor-pointer">
+                    <i data-lucide="log-out" class="text-red-500 w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 pt-28 pb-20 px-6 max-w-7xl mx-auto w-full space-y-10 relative z-10">
+
+        <!-- Formulario superior-->
+        <section class="bg-white/5 backdrop-blur-xl p-8 rounded-[2.5rem] border border-white/10">
+            <div class="mb-6">
+                <h3 class="text-xl font-black text-white font-heading uppercase">Registrar Nuevo Perfil</h3>
+                <p class="text-sm text-primary-50">Ingresa los datos del usuario</p>
+            </div>
+            <form id="perfilForm" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
+                <div class="space-y-1">
+                    <label class="text-[10px] font-black text-primary-400 uppercase tracking-widest ml-1">Nombre</label>
+                    <input type="text" id="nombre" required placeholder="Nombre..."
+                        class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 focus:border-primary-500 outline-none text-sm transition-all">
+                </div>
+                <div class="space-y-1">
+                    <label class="text-[10px] font-black text-primary-400 uppercase tracking-widest ml-1">Rol</label>
+                    <select id="rol" required
+                        class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 focus:border-primary-500 outline-none text-sm appearance-none cursor-pointer">
+                        <option value="Estudiante" class="bg-slate-900">Estudiante</option>
+                        <option value="Administrador" class="bg-slate-900">Administrador</option>
+                    </select>
+                </div>
+                <div class="space-y-1">
+                    <label class="text-[10px] font-black text-primary-400 uppercase tracking-widest ml-1">Email</label>
+                    <input type="email" id="correo" required placeholder="email@eco.com"
+                        class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 focus:border-primary-500 outline-none text-sm transition-all">
+                </div>
+                <div class="flex gap-2">
+                    <div class="flex-1 space-y-1">
+                        <label
+                            class="text-[10px] font-black text-primary-400 uppercase tracking-widest ml-1">Fecha</label>
+                        <input type="date" id="fecha_nacimiento" required
+                            class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 focus:border-primary-500 outline-none text-sm transition-all">
+                    </div>
+                    <button type="submit"
+                        class="bg-primary-500 hover:bg-primary-400 text-slate-950 font-black px-6 rounded-xl transition-all h-[42px] mt-auto">
+                        AÑADIR
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Seccion de usuarios -->
+        <section
+            class="bg-white/5 backdrop-blur-xl p-10 rounded-[2.5rem] border border-white/10 relative overflow-hidden group">
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5 mb-6">
+                <div class="flex items-center gap-4">
+                    <div
+                        class="w-12 h-12 bg-primary-500/10 rounded-xl flex items-center justify-center text-primary-400 border border-primary-500/20">
+                        <i data-lucide="users" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-black text-white font-heading">Control de Usuarios</h3>
+                        <p class="text-m text-primary-50">Gestiona el acceso de los usuarios a la plataforma.</p>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap gap-4">
+                    <button id="btnToggle" onclick="toggleVistaUsuarios()"
+                        class="bg-white/5 hover:bg-white/10 text-white font-bold py-3 px-6 rounded-xl transition-all border border-white/10 cursor-pointer flex items-center gap-2">
+                        <i id="iconToggle" data-lucide="eye" class="w-5 h-5"></i>
+                        <span id="textToggle">Ver todos los estudiantes</span>
+                    </button>
+                </div>
+            </div>
+
+            <div id="areaUsuarios" hidden class="space-y-6">
+                <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div
+                        class="bg-white/5 backdrop-blur-xl p-8 rounded-[2rem] border border-white/10 flex items-center gap-6 hover:bg-white/10 transition-all group border-b-4 border-b-transparent hover:border-b-emerald-500 hover:-translate-y-1">
+                        <div
+                            class="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center text-white border border-white/10 group-hover:scale-110 group-hover:bg-emerald-500/20 group-hover:text-emerald-400 transition-all">
+                            <i data-lucide="check-circle" class="w-8 h-8"></i>
+                        </div>
+                        <div>
+                            <p
+                                class="text-xs font-black text-primary-50 uppercase tracking-widest mb-1 group-hover:text-emerald-400 transition-all">
+                                Estudiantes Activos
+                            </p>
+                            <p class="text-3xl font-black text-white">
+                                <span id="stat-cargando"
+                                    class="inline-block w-12 h-8 bg-white/10 rounded-lg animate-pulse"></span>
+                                <span id="stat-activos" hidden>0</span>
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="bg-slate-950/30 rounded-[2rem] border border-white/10 overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse tabla-usuarios">
+                            <thead>
+                                <tr class="border-b border-white/10 bg-white/[0.06]">
+                                    <th class="px-6 py-4 text-xs font-black text-primary-400 uppercase tracking-widest">
+                                        Nombre</th>
+                                    <th class="px-6 py-4 text-xs font-black text-primary-400 uppercase tracking-widest">
+                                        Correo</th>
+                                    <th class="px-6 py-4 text-xs font-black text-primary-400 uppercase tracking-widest">
+                                        Estado</th>
+                                    <th
+                                        class="px-6 py-4 text-xs font-black text-primary-400 uppercase tracking-widest text-right">
+                                        Acciones</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="ContenedorPerfiles" class="divide-y divide-white/5">
+                                <!-- Aca trae la informacion de los usuarios-->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="notify"
+        class="fixed bottom-6 right-6 bg-primary-500 text-slate-950 font-black px-6 py-3 rounded-xl shadow-2xl translate-y-20 opacity-0 transition-all duration-500 z-[100] text-sm">
+        Guardado correctamente
     </div>
 
     <script>
+        document.addEventListener('DOMContentLoaded', () => lucide.createIcons());
+
         const API_URL = 'http://localhost:3000/perfiles';
+        let mostrandoUsuarios = false;
+        let usuarios = [];
 
-        const form = document.getElementById('perfilForm');
-        const profilesContainer = document.getElementById('profilesContainer');
-        const countSpan = document.getElementById('count');
-        const notificacion = document.getElementById('notificacion');
+        async function toggleVistaUsuarios() {
+            mostrandoUsuarios = !mostrandoUsuarios;
+            const area = document.getElementById('areaUsuarios');
+            const icon = document.getElementById('iconToggle');
+            const text = document.getElementById('textToggle');
 
-        function shownotificacion(message, type) {
-            notificacion.textContent = message;
-            notificacion.className = `notify-${type} mostrar-notificacion`;
-            setTimeout(() => {
-                notificacion.className = '';
-            }, 1000);
-        }
+            area.hidden = !mostrandoUsuarios;
+            icon.setAttribute('data-lucide', mostrandoUsuarios ? 'eye-off' : 'eye');
+            text.textContent = mostrandoUsuarios ? 'Ocultar estudiantes' : 'Ver todos los estudiantes';
 
-        // 1. OBTENER PERFILES (Metodo GET)
-        async function fetchPerfiles() {
-            try {
-                // Hacer la peticion GET al backend de NestJS
-                const response = await fetch(API_URL);
-                if (!response.ok) {
-                    throw new Error('Error al conectar con la API');
-                }
+            lucide.createIcons();
 
-                const data = await response.json();
-                renderProfiles(data);
-
-            } catch (error) {
-                console.error(error);
-                profilesContainer.innerHTML = `<p style="color: #ef4444;">No se pudo cargar los datos. Verifica que NestJS esté corriendo y CORS esté habilitado.</p>`;
-                shownotificacion('Error al cargar datos', 'error');
+            if (mostrandoUsuarios) {
+                await cargarUsuarios();
             }
         }
 
-        function renderProfiles(perfiles) {
-            countSpan.textContent = perfiles.length;
+        async function cargarUsuarios() {
+            document.getElementById('stat-cargando').hidden = false;
+            document.getElementById('stat-activos').hidden = true;
 
-            if (perfiles.length === 0) {
-                profilesContainer.innerHTML = '<p style="color: var(--text-muted);">No hay perfiles registrados aún.</p>';
+            try {
+                const res = await fetch(API_URL);
+                usuarios = await res.json();
+                renderizarUsuarios();
+
+                document.getElementById('stat-cargando').hidden = true;
+                document.getElementById('stat-activos').hidden = false;
+                document.getElementById('stat-activos').textContent = usuarios.filter(u => u.activo).length;
+            } catch (err) {
+                console.error('Error al cargar usuarios:', err);
+            }
+        }
+
+        function renderizarUsuarios() {
+            const container = document.getElementById('ContenedorPerfiles');
+            if (usuarios.length === 0) {
+                container.innerHTML = '<tr><td colspan="4" class="px-6 py-10 text-center text-white/20 italic">No hay estudiantes.</td></tr>';
                 return;
             }
 
-            profilesContainer.innerHTML = perfiles.map(perfil => `
-                <div class="tarjetas-perfiles">
-                    <div class="encabezado-perfiles">
-                        <span class="nombre-perfiles">${perfil.nombre}</span>
-                        <span class="estado ${perfil.activo ? 'estado-activo' : 'estado-inactivo'}">
-                            ${perfil.activo ? 'Activo' : 'Inactivo'}
-                        </span>
-                    </div>
-                    <div class="detalles-perfil">
-                        <strong>Rol:</strong> ${perfil.rol}
-                    </div>
-                    <div class="detalles-perfil">
-                        <strong>Email:</strong> ${perfil.correo}
-                    </div>
-                    <div class="detalles-perfil">
-                        <strong>Nacimiento:</strong> ${perfil.fecha_nacimiento}
-                    </div>
-                </div>
+            container.innerHTML = usuarios.map(u => `
+                <tr class="hover:bg-white/[0.02] transition-colors">
+                    <td class="px-6 py-5">
+                        <div class="flex items-center gap-3">
+                            <div class="w-11 h-11 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-primary-300">
+                                <i data-lucide="user" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <p class="font-bold text-white uppercase text-sm">${u.nombre}</p>
+                                <p class="text-[10px] text-slate-400">ID: ${u._id}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-5">
+                        <div class="flex items-center gap-2 text-slate-200">
+                            <i data-lucide="mail" class="w-4 h-4 text-primary-400"></i>
+                            <span class="text-xs">${u.correo || 'Sin correo'}</span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-5">
+                        <div onclick="cambiarEstado('${u._id}', ${u.activo})" 
+                             class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border-2 border-solid transition-all cursor-pointer hover:scale-105 active:scale-95 ${u.activo ? 'bg-emerald-500/10 border-emerald-500 text-emerald-400' : 'bg-red-500/10 border-red-500 text-red-400'}"
+                             title="Click para cambiar estado">
+                            <div class="w-2 h-2 rounded-full ${u.activo ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]' : 'bg-red-400 shadow-[0_0_8px_rgba(244,63,94,0.5)]'}"></div>
+                            <span class="text-[10px] font-black uppercase tracking-widest">${u.activo ? 'Activo' : 'Inactivo'}</span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-5 text-right">
+                        <button onclick="eliminar('${u._id}')" class="p-2 rounded-lg bg-white/5 hover:bg-red-500/20 text-slate-400 hover:text-red-400 transition-all active:scale-95">
+                            <i data-lucide="trash-2" class="w-5 h-5"></i>
+                        </button>
+                    </td>
+                </tr>
             `).join('');
+            lucide.createIcons();
         }
 
-        // 2. CREAR PERFIL (Metodo POST)
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault(); // Evitar que la página recargue
-
-            const nuevoPerfil = {
+        document.getElementById('perfilForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const body = {
                 nombre: document.getElementById('nombre').value,
                 rol: document.getElementById('rol').value,
                 correo: document.getElementById('correo').value,
                 fecha_nacimiento: document.getElementById('fecha_nacimiento').value,
-                activo: document.getElementById('activo').checked
+                activo: true
             };
 
             try {
-                // Hacer la peticion POST
-                const response = await fetch(API_URL, {
+                const res = await fetch(API_URL, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(nuevoPerfil)
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
                 });
 
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.message || 'Error al guardar');
+                if (res.ok) {
+                    const n = document.getElementById('notify');
+                    n.textContent = 'Usuario añadido con éxito';
+                    n.classList.remove('translate-y-20', 'opacity-0');
+                    setTimeout(() => n.classList.add('translate-y-20', 'opacity-0'), 3000);
+                    e.target.reset();
+                    if (mostrandoUsuarios) await cargarUsuarios();
+                } else {
+                    const errorData = await res.json();
+                    alert('Error al añadir: ' + (errorData.message || 'Error desconocido'));
                 }
-
-                shownotificacion('¡Perfil guardado con éxito!', 'success');
-
-                // Limpiar el formulario
-                form.reset();
-
-                // Recargar la lista para mostrar el nuevo perfil
-                fetchPerfiles();
-
-            } catch (error) {
-                console.error(error);
-                // Si class-validator rechaza el body (ej: correo invalido), caera aqui
-                shownotificacion(`Error: ${error.message}`, 'error');
+            } catch (err) {
+                console.error('Error en la petición:', err);
+                alert('No se pudo conectar con el servidor.');
             }
         });
 
-        // Al cargar la pagina, llamar al GET
-        window.addEventListener('DOMContentLoaded', fetchPerfiles);
+        async function eliminar(id) {
+            if (!confirm('¿Eliminar perfil de MongoDB?')) return;
+            const res = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+            if (res.ok) await cargarUsuarios();
+        }
+
+        async function cambiarEstado(id, estadoActual) {
+            const nuevoEstado = !estadoActual;
+            const accion = nuevoEstado ? 'Activar' : 'Desactivar';
+            if (!confirm(`¿Deseas ${accion.toLowerCase()} este usuario?`)) return;
+
+            try {
+                const res = await fetch(`${API_URL}/${id}`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ activo: nuevoEstado })
+                });
+
+                if (res.ok) {
+                    const n = document.getElementById('notify');
+                    n.textContent = `Usuario ${nuevoEstado ? 'activado' : 'desactivado'} correctamente`;
+                    n.classList.remove('translate-y-20', 'opacity-0');
+                    setTimeout(() => n.classList.add('translate-y-20', 'opacity-0'), 3000);
+                    await cargarUsuarios();
+                } else {
+                    const error = await res.json();
+                    alert('Error al cambiar estado: ' + (error.message || 'Desconocido'));
+                }
+            } catch (err) {
+                console.error('Error:', err);
+                alert('No se pudo conectar con el servidor.');
+            }
+        }
     </script>
 </body>
 
