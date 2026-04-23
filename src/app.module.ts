@@ -1,7 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { PerfilesModule } from './perfiles/perfiles.module';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { UsuariosModule } from './usuarios/usuarios.module';
+import { AuthModule } from './auth/auth.module';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -19,7 +21,28 @@ import { AppService } from './app.service';
       inject: [ConfigService],
     }),
 
-    PerfilesModule,
+    // --- CONFIGURACIÓN DE CORREO ---
+    MailerModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (config: ConfigService) => ({
+        transport: {
+          host: 'smtp.gmail.com',
+          port: 465,
+          secure: true,
+          auth: {
+            user: config.get('MAIL_USER'),
+            pass: config.get('MAIL_PASS'),
+          },
+        },
+        defaults: {
+          from: '"EcoSmart" <no-reply@ecosmart.com>',
+        },
+      }),
+      inject: [ConfigService],
+    }),
+
+    UsuariosModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

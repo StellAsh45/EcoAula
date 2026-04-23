@@ -151,10 +151,10 @@
             <div class="w-px h-6 bg-white/10 hidden sm:block"></div>
             <div class="flex items-center gap-4 relative">
                 <div class="text-right min-w-[100px] flex flex-col items-end">
-                    <p class="text-sm font-black text-primary-50 uppercase">ADMINISTRADOR</p>
-                    <p class="text-[10px] font-black text-primary-400 uppercase tracking-widest">General</p>
+                    <p class="text-sm font-black text-primary-50 uppercase" id="adminName">ADMINISTRADOR</p>
+                    <p class="text-[10px] font-black text-primary-400 uppercase tracking-widest">Administrador general</p>
                 </div>
-                <button
+                <button onclick="cerrarSesion()"
                     class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center hover:bg-white/20 hover:scale-105 overflow-hidden transition-all bg-transparent border-none cursor-pointer">
                     <i data-lucide="log-out" class="text-red-500 w-6 h-6"></i>
                 </button>
@@ -173,15 +173,15 @@
             <form id="perfilForm" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
                 <div class="space-y-1">
                     <label class="text-[10px] font-black text-primary-400 uppercase tracking-widest ml-1">Nombre</label>
-                    <input type="text" id="nombre" required placeholder="Nombre..."
+                    <input type="text" id="nombre" required placeholder="Nombre"
                         class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 focus:border-primary-500 outline-none text-sm transition-all">
                 </div>
                 <div class="space-y-1">
                     <label class="text-[10px] font-black text-primary-400 uppercase tracking-widest ml-1">Rol</label>
                     <select id="rol" required
                         class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 focus:border-primary-500 outline-none text-sm appearance-none cursor-pointer">
-                        <option value="Estudiante" class="bg-slate-900">Estudiante</option>
-                        <option value="Administrador" class="bg-slate-900">Administrador</option>
+                        <option value="estudiante" class="bg-slate-900">Estudiante</option>
+                        <option value="administrador" class="bg-slate-900">Administrador</option>
                     </select>
                 </div>
                 <div class="space-y-1">
@@ -191,14 +191,13 @@
                 </div>
                 <div class="flex gap-2">
                     <div class="flex-1 space-y-1">
-                        <label
-                            class="text-[10px] font-black text-primary-400 uppercase tracking-widest ml-1">Fecha</label>
-                        <input type="date" id="fecha_nacimiento" required
+                        <label class="text-[10px] font-black text-primary-400 uppercase tracking-widest ml-1">Contrasena</label>
+                        <input type="password" id="contrasena" required placeholder="••••••••"
                             class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 focus:border-primary-500 outline-none text-sm transition-all">
                     </div>
                     <button type="submit"
                         class="bg-primary-500 hover:bg-primary-400 text-slate-950 font-black px-6 rounded-xl transition-all h-[42px] mt-auto">
-                        AÑADIR
+                        Añadir
                     </button>
                 </div>
             </form>
@@ -285,7 +284,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => lucide.createIcons());
 
-        const API_URL = 'http://localhost:3000/perfiles';
+        const API_URL = 'http://localhost:3000/usuarios';
         let mostrandoUsuarios = false;
         let usuarios = [];
 
@@ -373,7 +372,7 @@
                 nombre: document.getElementById('nombre').value,
                 rol: document.getElementById('rol').value,
                 correo: document.getElementById('correo').value,
-                fecha_nacimiento: document.getElementById('fecha_nacimiento').value,
+                contrasena: document.getElementById('contrasena').value,
                 activo: true
             };
 
@@ -433,6 +432,17 @@
                 console.error('Error:', err);
                 alert('No se pudo conectar con el servidor.');
             }
+        }
+
+        function cerrarSesion() {
+            localStorage.clear();
+            window.location.href = 'ingreso.html';
+        }
+
+        // Cargar nombre del admin
+        const user = JSON.parse(localStorage.getItem('usuario') || '{}');
+        if (user.nombre) {
+            document.getElementById('adminName').textContent = user.nombre;
         }
     </script>
 </body>
